@@ -1,72 +1,104 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Tickets</title>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<title>Ticket Avenue</title>
+<link rel="icon" href="logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
 <style>
-:root{--bg:#eef1f4;--ink:#13233a;--mu:#5d6b7e;--ac:#f2a900;--card:#fff;--bd:#d5dbe3;--ok:#16794c;--no:#b3261e}
-@media(prefers-color-scheme:dark){:root{--bg:#0e1724;--ink:#eaf0f7;--mu:#98a6b8;--card:#162235;--bd:#27384f;--ok:#4cc98d;--no:#ff7b72}}
+:root{--bg:#f6f6f6;--ink:#1a1a1a;--mu:#6b6b6b;--ac:#ff4d00;--acd:#d63c00;--card:#fff;--bd:#e4e4e4;--ok:#16794c;--no:#b3261e}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 'DM Sans',system-ui,sans-serif}
-h1,h2,h3{font-family:'Bricolage Grotesque','DM Sans',sans-serif;line-height:1.15;margin:.2em 0 .5em}
-header{display:flex;gap:20px;align-items:center;padding:14px 5vw;border-bottom:2px dashed var(--bd)}
-header b{font:800 22px 'Bricolage Grotesque',sans-serif;margin-right:auto}
-a{color:inherit}main{max-width:1000px;margin:0 auto;padding:28px 5vw}footer{padding:24px 5vw;color:var(--mu);font-size:14px;text-align:center}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 'Nunito',system-ui,sans-serif}
+h1,h2,h3,h4{line-height:1.15;margin:.2em 0 .5em;font-weight:800}
+a{color:inherit}
+.top{background:#fff;border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:5}
+.tr{display:flex;align-items:center;gap:16px;padding:10px 5vw}.tr img{height:38px;display:block}
+.tr input{max-width:340px;margin:0 0 0 auto;border-radius:99px}.my{font-weight:800;text-decoration:none;white-space:nowrap}
+nav{display:flex;gap:6px;padding:0 5vw 8px;overflow-x:auto}
+nav a{padding:6px 14px;border-radius:99px;text-decoration:none;font-weight:700;font-size:15px;white-space:nowrap}
+nav a:hover,nav a.on{background:var(--ac);color:#fff}
+main{max-width:1100px;margin:0 auto;padding:24px 5vw}
+.banner{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:center;margin-bottom:20px}
+.banner h1{font-size:clamp(32px,5vw,54px);font-weight:900}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.trust{display:flex;gap:10px 24px;flex-wrap:wrap;color:var(--mu);font-weight:700;font-size:14px;margin:0 0 26px}
+.trust span:before{content:"✓ ";color:var(--ac)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:14px;overflow:hidden;text-decoration:none;display:block}
-.card img,.hero{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;border-radius:0}
+.card img,.hero{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
 .hero{border-radius:14px;margin-bottom:16px}
-.p{padding:14px 16px;border-top:2px dashed var(--bd)}.p h3{margin:0 0 4px}
+.p{padding:14px 16px}.p h3{margin:2px 0 4px}.dt{color:var(--acd);font-weight:800;font-size:13px}.pr{font-weight:800;margin-top:6px}
 .mu{color:var(--mu)}
 .box{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px;margin:16px 0}
-input,select,textarea,button{font:inherit;width:100%;padding:11px 12px;margin:6px 0;border-radius:10px;border:1px solid var(--bd);background:var(--card);color:var(--ink)}
-button{background:var(--ac);color:#13233a;border:0;font-weight:700;cursor:pointer;width:auto;padding:11px 20px}
+input,select,textarea,button,a.btn{font:inherit;width:100%;padding:11px 12px;margin:6px 0;border-radius:10px;border:1px solid var(--bd);background:var(--card);color:var(--ink)}
+button,a.btn{background:var(--ac);color:#fff;border:0;font-weight:800;cursor:pointer;width:auto;padding:11px 22px;text-decoration:none;display:inline-block}
 button.s{background:transparent;border:1px solid var(--bd);color:var(--ink);padding:6px 12px;margin:2px}
+.btns button.s{padding:11px 22px;background:#fff;margin:6px 0}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 18px}
+.chips button{background:#fff;color:var(--ink);border:1px solid var(--bd);padding:7px 14px;border-radius:99px;margin:0}
+.chips button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
 table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:8px;border-bottom:1px solid var(--bd);text-align:left;vertical-align:top}
 .tw{overflow-x:auto}.r{display:flex;gap:8px}.r>*{flex:1}
 .tag{padding:2px 10px;border-radius:99px;font-size:13px;background:var(--bd);white-space:nowrap}
 .approved,.good{color:var(--ok)}.rejected,.bad,.err{color:var(--no)}
-#res{font:700 20px 'Bricolage Grotesque',sans-serif;text-align:center;padding:24px}
-#res.good{border-color:var(--ok)}#res.bad{border-color:var(--no)}
+#res{font-weight:800;font-size:20px;text-align:center;padding:24px}#res.good{border-color:var(--ok)}#res.bad{border-color:var(--no)}
+footer{background:#fff;border-top:1px solid var(--bd);padding:32px 5vw 16px;margin-top:30px;font-size:15px}
+.fw{display:grid;grid-template-columns:2fr 1fr 1fr 1.4fr;gap:24px;max-width:1100px;margin:auto}
+footer h4{margin:0 0 8px}footer a{display:block;text-decoration:none;color:var(--mu);padding:2px 0}footer img{height:36px}
+.copy{text-align:center;color:var(--mu);font-size:13px;margin-top:24px}
 :focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+@media(max-width:760px){.banner{grid-template-columns:1fr}.fw{grid-template-columns:1fr 1fr}.tr input{max-width:none}}
 </style></head><body>
-<header><b>Tickets</b><a href="#/">Events</a><a href="#/find">My tickets</a></header>
+<div class="top"><div class="tr"><a href="#/"><img src="logo.png" alt="Ticket Avenue"></a><input id="sq" type="search" placeholder="Search events" aria-label="Search events"><a class="my" href="#/find">My tickets</a></div>
+<nav><a href="#/c/concerts">Concerts</a><a href="#/c/edm">EDM</a><a href="#/c/theatre">Art &amp; Drama</a><a href="#/c/sports">Sport &amp; Adventure</a><a href="#/c/family">Family &amp; Others</a></nav></div>
 <main id="app">Loading…</main>
-<footer>Bank transfer payments are approved manually within 2–3 hours. · <a href="#/admin">Admin</a> · <a href="#/scan">Scanner</a></footer>
+<footer><div class="fw"><div><img src="logo.png" alt="Ticket Avenue"><p class="mu">Live events, booked online. Payments by bank transfer are approved within 2–3 hours.</p></div>
+<div><h4>Categories</h4><a href="#/c/concerts">Concerts</a><a href="#/c/edm">EDM</a><a href="#/c/theatre">Art &amp; Drama</a><a href="#/c/sports">Sport &amp; Adventure</a><a href="#/c/family">Family &amp; Others</a></div>
+<div><h4>For organisers</h4><a href="#/admin">Admin portal</a><a href="#/scan">Ticket scanner</a></div>
+<div><h4>Contact us</h4><span id="fc" class="mu"></span></div></div><p class="copy">© 2026 Ticket Avenue. All rights reserved.</p></footer>
+<script src="config.js"></script>
 <script>
-/* ====== EDIT THESE ====== */
-const CFG={
-  url:'https://szsgtvvhbokjwothhfts.supabase.co', key:'sb_publishable_pGkJrNZ1vNadjVRGszeJQA_yJndMHT1', cur:'LKR',
-  bank:{name:'Your Bank',holder:'Account holder name',no:'0000000000',branch:'Branch name'}
-};
-/* ======================== */
+
 const db=supabase.createClient(CFG.url,CFG.key),$=s=>document.querySelector(s),app=$('#app');
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money=n=>CFG.cur+' '+Number(n).toLocaleString();
 const when=d=>d?new Date(d).toLocaleString([],{dateStyle:'medium',timeStyle:'short'}):'';
 const L={pending:'Waiting for payment',slip_uploaded:'Slip received – checking (2–3 hours)',approved:'Approved',rejected:'Rejected – please upload a new slip'};
 const up=async(b,f)=>{const p=crypto.randomUUID()+'-'+f.name.replace(/[^\w.]/g,'_');const{error}=await db.storage.from(b).upload(p,f);if(error)throw error;return db.storage.from(b).getPublicUrl(p).data.publicUrl};
-let scanner=null;
+let scanner=null,Q='',R='all';
 async function routes(){
   if(scanner){scanner.stop().catch(()=>{});scanner=null}
-  const[,a,b,c]=location.hash.split('/');
+  const[,a,b,c]=location.hash.split('/');document.querySelectorAll('nav a').forEach(x=>x.classList.toggle('on',x.getAttribute('href')===location.hash));
   try{
-    if(a==='e')await event(b);else if(a==='o')await order(b,decodeURIComponent(c||''));else if(a==='find')find();
+    if(a==='e')await event(b);else if(a==='o')await order(b,decodeURIComponent(c||''));else if(a==='c')await home(b);else if(a==='find')find();
     else if(a==='admin')await admin();else if(a==='scan')await scan();else await home();
   }catch(e){app.innerHTML=`<p class=err>${esc(e.message)}</p>`}
   scrollTo(0,0);
 }
 addEventListener('hashchange',routes);routes();
+$('#fc').innerHTML=[CFG.contact?.phone,CFG.contact?.email,CFG.contact?.address].filter(Boolean).map(esc).join('<br>');
+$('#sq').onkeydown=e=>{if(e.key==='Enter'){Q=e.target.value.trim().toLowerCase();(location.hash===''||location.hash==='#/')?routes():location.hash='#/'}};
 
-async function home(){
+const CATS={concerts:'Concerts',edm:'EDM',theatre:'Art & Drama',sports:'Sport & Adventure',family:'Family & Others'};
+const dshort=d=>new Date(d).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+const lo=e=>{const p=Math.min(...e.ticket_types.map(t=>t.price));return isFinite(p)?'From '+money(p):''};
+const ecard=e=>`<a class=card href="#/e/${e.id}">${e.image_url?`<img src="${esc(e.image_url)}" alt="">`:''}<div class=p><div class=dt>${dshort(e.event_date)}</div><h3>${esc(e.title)}</h3><span class=mu>${esc(e.venue)}</span><div class=pr>${lo(e)}</div></div></a>`;
+const rng=k=>{const n=new Date(),t=new Date(n.getFullYear(),n.getMonth(),n.getDate()),m=new Date(t);m.setDate(t.getDate()-((t.getDay()+6)%7));
+  const ad=(d,x)=>{const r=new Date(d);r.setDate(r.getDate()+x);return r},y=n.getFullYear(),o=n.getMonth();
+  if(k==='fri'){const f=ad(m,4);return[f,ad(f,1)]}if(k==='week')return[m,ad(m,7)];if(k==='next')return[ad(m,7),ad(m,14)];
+  if(k==='month')return[new Date(y,o,1),new Date(y,o+1,1)];if(k==='nmonth')return[new Date(y,o+1,1),new Date(y,o+2,1)];return null};
+async function home(cat){
   const{data}=await db.from('events').select('*, ticket_types(price)').order('event_date');
-  app.innerHTML=`<h1>What's on</h1><div class=grid>${(data||[]).map(e=>{const p=Math.min(...e.ticket_types.map(t=>t.price));
-    return`<a class=card href="#/e/${e.id}">${e.image_url?`<img src="${esc(e.image_url)}" alt="">`:''}<div class=p><h3>${esc(e.title)}</h3><span class=mu>${when(e.event_date)}<br>${esc(e.venue)}${isFinite(p)?`<br>From ${money(p)}`:''}</span></div></a>`}).join('')||'<p>No events yet. Check back soon.</p>'}</div>`;
+  let all=(data||[]).filter(e=>new Date(e.event_date)>=Date.now()-864e5);if(cat)all=all.filter(e=>e.category===cat);
+  const g=rng(R),list=all.filter(e=>(!Q||(e.title+' '+e.venue).toLowerCase().includes(Q))&&(!g||(new Date(e.event_date)>=g[0]&&new Date(e.event_date)<g[1]))),f=all[0];
+  app.innerHTML=`${!cat?`<div class=banner><div><h1>Live events, booked in minutes.</h1><p class=mu>Pick an event, reserve your seats and pay by bank transfer. Your QR e-tickets are ready once we confirm your payment.</p><div class=btns>${f?`<a class=btn href="#/e/${f.id}">View next event</a>`:''}<button class=s onclick="$('#list').scrollIntoView()">Browse all events</button></div></div>${f?ecard(f):''}</div>
+  <div class=trust><span>Bank transfer checkout</span><span>Approved within 2–3 hours</span><span>QR e-tickets</span></div>`:`<h1>${CATS[cat]||'Events'}</h1>`}
+  <h2 id=list>On the calendar</h2><div class=chips>${[['all','All'],['fri','This Friday'],['week','This week'],['next','Next week'],['month','This month'],['nmonth','Next month']].map(([k,n])=>`<button class="${R===k?'on':''}" data-k=${k}>${n}</button>`).join('')}</div>
+  <div class=grid>${list.map(ecard).join('')||'<p>No events found.</p>'}</div>`;
+  document.querySelectorAll('.chips button').forEach(b=>b.onclick=()=>{R=b.dataset.k;home(cat)});
 }
-
 async function event(id){
   const{data:e,error}=await db.from('events').select('*').eq('id',id).single();if(error)throw error;
   const{data:t}=await db.rpc('types_left',{p_event:id});
@@ -137,7 +169,7 @@ async function admin(){
   const[{data:ev},{data:od}]=await Promise.all([db.from('events').select('*, ticket_types(*)').order('created_at',{ascending:false}),db.from('orders').select('*, events(title)').order('created_at',{ascending:false})]);
   app.innerHTML=`<div class=r><h1>Admin</h1><div style="text-align:right"><button class=s id=lo>Log out</button></div></div>
   <details class=box><summary><b>Create event</b></summary>
-   <input id=t1 placeholder="Event title"><input id=vn placeholder="Venue"><input id=dt type=datetime-local><textarea id=ds rows=4 placeholder="Description"></textarea>
+   <input id=t1 placeholder="Event title"><input id=vn placeholder="Venue"><select id=cg><option value="">Category</option><option value=concerts>Concerts</option><option value=edm>EDM</option><option value=theatre>Art &amp; Drama</option><option value=sports>Sport &amp; Adventure</option><option value=family>Family &amp; Others</option></select><input id=dt type=datetime-local><textarea id=ds rows=4 placeholder="Description"></textarea>
    <label class=mu>Event image</label><input id=im type=file accept="image/*">
    <label class=mu>Ticket design (optional) – landscape 210×90 mm image, keep the bottom-right corner empty for the QR code</label><input id=dg type=file accept="image/*">
    <h3>Ticket types</h3><div id=tts></div><button class=s id=add>+ Add ticket type</button><br><br><button id=sv>Save event</button></details>
@@ -151,7 +183,7 @@ async function admin(){
   $('#sv').onclick=async()=>{try{
     const f=x=>$('#'+x).files[0];
     const image_url=f('im')?await up('images',f('im')):null,design_url=f('dg')?await up('images',f('dg')):null;
-    const{data:e,error}=await db.from('events').insert({title:$('#t1').value,venue:$('#vn').value,description:$('#ds').value,event_date:new Date($('#dt').value).toISOString(),image_url,design_url}).select().single();if(error)throw error;
+    const{data:e,error}=await db.from('events').insert({title:$('#t1').value,venue:$('#vn').value,category:$('#cg').value||null,description:$('#ds').value,event_date:new Date($('#dt').value).toISOString(),image_url,design_url}).select().single();if(error)throw error;
     const rows=[...document.querySelectorAll('.tt')].map(r=>({event_id:e.id,name:r.children[0].value,price:+r.children[1].value,quantity:+r.children[2].value})).filter(x=>x.name&&x.quantity>0);
     const{error:e2}=await db.from('ticket_types').insert(rows);if(e2)throw e2;admin();
   }catch(x){alert(x.message)}};
